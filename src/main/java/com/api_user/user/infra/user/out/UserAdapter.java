@@ -3,6 +3,8 @@ package com.api_user.user.infra.user.out;
 import com.api_user.user.domain.user.model.User;
 import com.api_user.user.domain.user.spi.IUserPersistencePort;
 
+import java.util.Optional;
+
 public class UserAdapter implements IUserPersistencePort {
 
     private final IUserRepository userRepository;
@@ -26,5 +28,10 @@ public class UserAdapter implements IUserPersistencePort {
     @Override
     public void createUser(User user) {
         userRepository.save(userMapper.toEntity(user));
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email).map(userMapper::toUser);
     }
 }

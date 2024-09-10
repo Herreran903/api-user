@@ -17,7 +17,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .components(new Components())
                 .info(new Info()
-                        .title("Stock API")
+                        .title("User API")
                         .version(appVersion)
                         .description(appDescription)
                         .termsOfService("http://swagger.io/terms/")

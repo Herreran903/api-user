@@ -22,4 +22,7 @@ public class UserConstants {
     public static final String BIRTHDATE = "birthdate";
     public static final String PASSWORD = "password";
 
+    public static final String USER_TABLE = "users";
+    public static final String USER_ROLE_COLUMN = "role_id";
+
 }

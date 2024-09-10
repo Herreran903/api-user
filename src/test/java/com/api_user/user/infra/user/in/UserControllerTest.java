@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -32,6 +33,7 @@ class UserControllerTest {
     private IUserHandler userHandler;
 
     @Test
+    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestIfJsonNoValid() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_JSON;
 
@@ -49,6 +51,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestForInvalidUserName() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.EMPTY_NAME;
@@ -66,6 +69,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestForInvalidUserLastname() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.EMPTY_LASTNAME;
@@ -85,6 +89,7 @@ class UserControllerTest {
 
 
     @Test
+    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestIfBirthdateIsFuture() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.FUTURE_BIRTHDATE;
@@ -102,6 +107,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestForInvalidEmail() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.INVALID_EMAIL;
@@ -119,6 +125,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestForInvalidDni() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.INVALID_DNI;
@@ -136,6 +143,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestForInvalidPhone() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.INVALID_PHONE;
@@ -153,6 +161,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnCreatedWhenUserIsSuccessfullyCreated() throws Exception {
 
         String requestBody = getUserRequestBody("Name", "Lastname", "0123456789", "1234567890", "1990-01-01", "email@example.com", "password", "USER");

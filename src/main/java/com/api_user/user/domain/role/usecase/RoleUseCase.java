@@ -5,6 +5,7 @@ import com.api_user.user.domain.role.exception.RoleExceptionMessage;
 import com.api_user.user.domain.role.exception.ex.RoleNotFoundByNameException;
 import com.api_user.user.domain.role.model.Role;
 import com.api_user.user.domain.role.spi.IRolePersistencePort;
+import com.api_user.user.domain.role.util.RoleEnum;
 
 public class RoleUseCase implements IRoleServicePort {
 
@@ -15,7 +16,7 @@ public class RoleUseCase implements IRoleServicePort {
     }
 
     @Override
-    public Role getRoleByName(String code) {
+    public Role getRoleByName(RoleEnum code) {
         return rolePersistencePort.getRoleByName(code).
                 orElseThrow(() -> new RoleNotFoundByNameException(RoleExceptionMessage.NOT_FOUND_ROLE));
     }

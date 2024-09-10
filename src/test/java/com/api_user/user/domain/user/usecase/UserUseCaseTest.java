@@ -2,6 +2,7 @@ package com.api_user.user.domain.user.usecase;
 
 import com.api_user.user.domain.role.api.IRoleServicePort;
 import com.api_user.user.domain.role.model.Role;
+import com.api_user.user.domain.role.util.RoleEnum;
 import com.api_user.user.domain.user.exception.UserExceptionMessage;
 import com.api_user.user.domain.user.exception.ex.UserAlreadyExistException;
 import com.api_user.user.domain.user.exception.ex.UserNotValidFieldException;
@@ -97,7 +98,7 @@ class UserUseCaseTest{
         when(userPersistencePort.isUserPresentByDni(user.getDni())).thenReturn(false);
         when(userPersistencePort.isUserPresentByEmail(user.getEmail())).thenReturn(false);
         when(passwordEncoderPort.encode(user.getPassword())).thenReturn("encodedPassword");
-        when(roleServicePort.getRoleByName(VALID_ROLE_NAME)).thenReturn(role);
+        when(roleServicePort.getRoleByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT)).thenReturn(role);
 
         userUseCase.createUserWarehouseAssistant(user);
 
