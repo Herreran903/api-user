@@ -4,14 +4,14 @@ import com.api_user.user.app.user.dto.UserRequest;
 import com.api_user.user.app.user.handler.IUserHandler;
 import com.api_user.user.domain.user.exception.UserExceptionMessage;
 import com.api_user.user.domain.util.GlobalExceptionMessage;
-import com.api_user.user.infra.security.SecurityConfig;
+import com.api_user.user.infra.security.jwt.JwtService;
+import com.api_user.user.infra.security.userdetail.UserDetailServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class)
-@Import(SecurityConfig.class)
+@AutoConfigureMockMvc(addFilters=false)
 class UserControllerTest {
 
     @Autowired
@@ -32,12 +32,17 @@ class UserControllerTest {
     @MockBean
     private IUserHandler userHandler;
 
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean
+    private UserDetailServiceImpl userDetailsService;
+
     @Test
-    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestIfJsonNoValid() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_JSON;
 
-        mvc.perform(post("/users/warehouse-assistant/register/")
+        mvc.perform(post("/user/warehouse-assistant/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":,}"))
                 .andDo(print())
@@ -51,14 +56,13 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestForInvalidUserName() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.EMPTY_NAME;
 
         String requestBody = getUserRequestBody("", "Lastname", "0123456789", "1234567890", "1990-01-01", "email@example.com", "password", "USER");
 
-        mvc.perform(post("/users/warehouse-assistant/register/")
+        mvc.perform(post("/user/warehouse-assistant/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andDo(print())
@@ -69,7 +73,6 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestForInvalidUserLastname() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.EMPTY_LASTNAME;
@@ -77,7 +80,7 @@ class UserControllerTest {
         String requestBody = getUserRequestBody("Name", "", "0123456789", "1234567890", "1990-01-01", "email@example.com", "password", "USER");
 
 
-        mvc.perform(post("/users/warehouse-assistant/register/")
+        mvc.perform(post("/user/warehouse-assistant/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andDo(print())
@@ -89,14 +92,13 @@ class UserControllerTest {
 
 
     @Test
-    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestIfBirthdateIsFuture() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.FUTURE_BIRTHDATE;
 
         String requestBody = getUserRequestBody("Name", "Lastname", "0123456789", "1234567890", "2100-01-01", "email@example.com", "password", "USER");
 
-        mvc.perform(post("/users/warehouse-assistant/register/")
+        mvc.perform(post("/user/warehouse-assistant/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andDo(print())
@@ -107,14 +109,13 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestForInvalidEmail() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.INVALID_EMAIL;
 
         String requestBody = getUserRequestBody("Name", "Lastname", "123456789", "1234567890", "1990-01-01", "invalid-email", "password", "USER");
 
-        mvc.perform(post("/users/warehouse-assistant/register/")
+        mvc.perform(post("/user/warehouse-assistant/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andDo(print())
@@ -125,14 +126,13 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestForInvalidDni() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.INVALID_DNI;
 
         String requestBody = getUserRequestBody("Name", "Lastname", "invalid-dni", "1234567890", "1990-01-01", "email@example.com", "password", "USER");
 
-        mvc.perform(post("/users/warehouse-assistant/register/")
+        mvc.perform(post("/user/warehouse-assistant/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andDo(print())
@@ -143,14 +143,13 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnBadRequestForInvalidPhone() throws Exception {
         String expectedMessage = GlobalExceptionMessage.INVALID_OBJECT;
         String expectedErrorMessage = UserExceptionMessage.INVALID_PHONE;
 
         String requestBody = getUserRequestBody("Name", "Lastname", "0123456789", "invalid-phone", "1990-01-01", "email@example.com", "password", "USER");
 
-        mvc.perform(post("/users/warehouse-assistant/register/")
+        mvc.perform(post("/user/warehouse-assistant/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andDo(print())
@@ -161,12 +160,11 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "Admin", roles = {"ROLE_ADMIN"})
     void shouldReturnCreatedWhenUserIsSuccessfullyCreated() throws Exception {
 
         String requestBody = getUserRequestBody("Name", "Lastname", "0123456789", "1234567890", "1990-01-01", "email@example.com", "password", "USER");
 
-        mvc.perform(post("/users/warehouse-assistant/register/")
+        mvc.perform(post("/user/warehouse-assistant/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andDo(print())

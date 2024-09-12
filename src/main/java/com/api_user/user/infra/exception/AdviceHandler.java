@@ -9,7 +9,6 @@ import com.api_user.user.domain.user.exception.ex.UserAlreadyExistException;
 import com.api_user.user.domain.user.exception.ex.UserNotValidFieldException;
 import com.api_user.user.domain.util.GlobalExceptionMessage;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -167,31 +166,6 @@ public class AdviceHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 GlobalExceptionMessage.INVALID_OBJECT,
-                "",
-                LocalDateTime.now(),
-                errorsDetails
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(details);
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ExceptionDetails> handleConstraintViolationException(ConstraintViolationException ex) {
-
-        List<ErrorDetail> errorsDetails = ex.getConstraintViolations().stream()
-                .map(constraintViolation -> {
-                    String fieldName = constraintViolation.getPropertyPath().toString();
-                    fieldName = fieldName.contains(".")
-                            ? fieldName.substring(fieldName.lastIndexOf('.') + 1)
-                            : fieldName;
-                    return new ErrorDetail(fieldName, constraintViolation.getMessage());
-                })
-                .toList();
-
-        ExceptionDetails details = new ExceptionDetails(
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                GlobalExceptionMessage.INVALID_PARAMETERS,
                 "",
                 LocalDateTime.now(),
                 errorsDetails

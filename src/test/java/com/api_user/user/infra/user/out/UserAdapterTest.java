@@ -60,56 +60,56 @@ class UserAdapterTest {
         );
     }
 
-//    @Test
-//    void testIsUserPresentByDniUserExists() {
-//        when(userRepository.findByDni(VALID_USER_DNI)).thenReturn(Optional.of(new UserEntity()));
-//
-//        Boolean result = userAdapter.isUserPresentByDni(VALID_USER_DNI);
-//
-//        assertTrue(result);
-//        verify(userRepository, times(1)).findByDni(VALID_USER_DNI);
-//    }
-//
-//    @Test
-//    void testIsUserPresentByDniUserDoesNotExist() {
-//        String dni = "";
-//        when(userRepository.findByDni(dni)).thenReturn(Optional.empty());
-//
-//        Boolean result = userAdapter.isUserPresentByDni(dni);
-//
-//        assertFalse(result);
-//        verify(userRepository, times(1)).findByDni(dni);
-//    }
-//
-//    @Test
-//    void testIsUserPresentByEmailUserExists() {
-//        when(userRepository.findByEmail(VALID_USER_EMAIL)).thenReturn(Optional.of(new UserEntity()));
-//
-//        Boolean result = userAdapter.isUserPresentByEmail(VALID_USER_EMAIL);
-//
-//        assertTrue(result);
-//        verify(userRepository, times(1)).findByEmail(VALID_USER_EMAIL);
-//    }
-//
-//    @Test
-//    void testIsUserPresentByEmailUserDoesNotExist() {
-//        String email = "nonexistent@example.com";
-//        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
-//
-//        Boolean result = userAdapter.isUserPresentByEmail(email);
-//
-//        assertFalse(result);
-//        verify(userRepository, times(1)).findByEmail(email);
-//    }
-//
-//    @Test
-//    void shouldCreateUserSuccessfully() {
-//        when(userMapper.toEntity(user)).thenReturn(userEntity);
-//
-//        userAdapter.createUser(user);
-//
-//        verify(userMapper, times(1)).toEntity(user);
-//        verify(userRepository, times(1)).save(userEntity);
-//    }
+    @Test
+    void testIsUserPresentByDniUserExists() {
+        when(userRepository.findByDni(VALID_USER_DNI)).thenReturn(Optional.of(new UserEntity()));
+
+        Boolean result = userAdapter.isUserPresentByDni(VALID_USER_DNI);
+
+        assertTrue(result);
+        verify(userRepository, times(1)).findByDni(VALID_USER_DNI);
+    }
+
+    @Test
+    void testIsUserPresentByDniUserDoesNotExist() {
+        String dni = "";
+        when(userRepository.findByDni(dni)).thenReturn(Optional.empty());
+
+        Boolean result = userAdapter.isUserPresentByDni(dni);
+
+        assertFalse(result);
+        verify(userRepository, times(1)).findByDni(dni);
+    }
+
+    @Test
+    void testIsUserPresentByEmailUserExists() {
+        when(userRepository.findByEmail(VALID_USER_EMAIL)).thenReturn(Optional.of(new UserEntity()));
+
+        Boolean result = userAdapter.isUserPresentByEmail(VALID_USER_EMAIL);
+
+        assertTrue(result);
+        verify(userRepository, times(1)).findByEmail(VALID_USER_EMAIL);
+    }
+
+    @Test
+    void testIsUserPresentByEmailUserDoesNotExist() {
+        String email = "nonexistent@example.com";
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        Boolean result = userAdapter.isUserPresentByEmail(email);
+
+        assertFalse(result);
+        verify(userRepository, times(1)).findByEmail(email);
+    }
+
+    @Test
+    void shouldCreateUserSuccessfully() {
+        when(userMapper.toEntity(user)).thenReturn(userEntity);
+
+        userAdapter.createUser(user);
+
+        verify(userMapper, times(1)).toEntity(user);
+        verify(userRepository, times(1)).save(userEntity);
+    }
 
 }

@@ -53,8 +53,8 @@ class AuthAdapterTest {
         verify(authenticationManager).authenticate(
                 argThat(authenticationToken ->
                         authenticationToken instanceof UsernamePasswordAuthenticationToken &&
-                                ((UsernamePasswordAuthenticationToken) authenticationToken).getPrincipal().equals(auth.getEmail()) &&
-                                ((UsernamePasswordAuthenticationToken) authenticationToken).getCredentials().equals(auth.getPassword())
+                                authenticationToken.getPrincipal().equals(auth.getEmail()) &&
+                                authenticationToken.getCredentials().equals(auth.getPassword())
                 )
         );
     }

@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +24,7 @@ import static com.api_user.user.infra.util.Urls.USER_URL;
 
 @RestController
 @RequestMapping(USER_URL)
-@PreAuthorize("denyAll()")
+//@PreAuthorize("denyAll()")
 @Validated
 public class UserController {
 
@@ -60,7 +59,7 @@ public class UserController {
             )
     })
     @PostMapping(REGISTER_WAREHOUSE_URL)
-    @PreAuthorize("hasRole(T(com.api_user.user.domain.role.util.RoleEnum).ROLE_ADMIN.toString())")
+    //@PreAuthorize("hasRole(T(com.api_user.user.domain.role.util.RoleEnum).ROLE_ADMIN.toString())")
     ResponseEntity<Void> createUser(@Valid @RequestBody UserRequest userRequest) {
         userHandler.createUserWarehouseAssistant(userRequest);
 

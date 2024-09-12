@@ -6,6 +6,7 @@ import com.api_user.user.domain.auth.exception.ex.AuthNotValidFieldException;
 import com.api_user.user.domain.auth.model.Auth;
 import com.api_user.user.domain.auth.spi.IAuthAdapterPort;
 import com.api_user.user.domain.auth.util.AuthConstants;
+import com.api_user.user.domain.role.model.Role;
 import com.api_user.user.domain.user.model.User;
 import com.api_user.user.domain.user.spi.IUserPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,7 +111,14 @@ class AuthUseCaseTest {
 
     @Test
     void shouldCallAuthAdapterPortAuthenticate() {
-        when(userPersistencePort.getUserByEmail(VALID_USER_EMAIL)).thenReturn(Optional.of(mock(User.class)));
+        Role role = new Role(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
+
+        User user = new User();
+        user.setId(VALID_USER_ID);
+        user.setEmail(VALID_USER_EMAIL);
+        user.setRole(role);
+
+        when(userPersistencePort.getUserByEmail(VALID_USER_EMAIL)).thenReturn(Optional.of(user));
 
         authUseCase.authenticate(auth);
 
@@ -119,9 +127,12 @@ class AuthUseCaseTest {
 
     @Test
     void shouldGenerateTokenSuccessfully() {
+        Role role = new Role(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
+
         User user = new User();
         user.setId(VALID_USER_ID);
         user.setEmail(VALID_USER_EMAIL);
+        user.setRole(role);
 
         when(userPersistencePort.getUserByEmail(auth.getEmail())).thenReturn(Optional.of(user));
 
@@ -137,6 +148,7 @@ class AuthUseCaseTest {
 
         Map<String, Object> capturedClaims = claimsCaptor.getValue();
         assertEquals(user.getId(), capturedClaims.get(AuthConstants.ID));
+        assertEquals(role.getName(), capturedClaims.get(AuthConstants.ROLES));
     }
 
 }
