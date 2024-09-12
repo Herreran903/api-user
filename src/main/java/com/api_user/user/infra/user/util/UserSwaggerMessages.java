@@ -21,6 +21,4 @@ public class UserSwaggerMessages {
             "\"role\": \"assistant\" }";
 
     public static final String RESPONSE_201_DESCRIPTION = "User successfully created";
-    public static final String RESPONSE_400_DESCRIPTION = "Invalid input";
-    public static final String RESPONSE_500_DESCRIPTION = "Internal server error";
 }

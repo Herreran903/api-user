@@ -1,18 +1,21 @@
 package com.api_user.user.infra.user.out;
 
+import com.api_user.user.domain.user.util.UserConstants;
 import com.api_user.user.infra.role.out.RoleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
+@Table(name = UserConstants.USER_TABLE)
 public class UserEntity {
 
     @Id
@@ -40,7 +43,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = UserConstants.USER_ROLE_COLUMN, nullable = false)
     private RoleEntity role;
 }

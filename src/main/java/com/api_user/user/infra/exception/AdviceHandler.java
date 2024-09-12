@@ -1,15 +1,19 @@
 package com.api_user.user.infra.exception;
 
+import com.api_user.user.domain.auth.exception.AuthExceptionMessage;
+import com.api_user.user.domain.auth.exception.ex.AuthInvalidCredentialsException;
+import com.api_user.user.domain.auth.exception.ex.AuthNotValidFieldException;
 import com.api_user.user.domain.error.ErrorDetail;
 import com.api_user.user.domain.role.exception.ex.RoleNotFoundByNameException;
 import com.api_user.user.domain.user.exception.ex.UserAlreadyExistException;
 import com.api_user.user.domain.user.exception.ex.UserNotValidFieldException;
 import com.api_user.user.domain.util.GlobalExceptionMessage;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -66,6 +70,63 @@ public class AdviceHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(details);
     }
 
+    //Auth
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ExceptionDetails> handleBadCredentialsException(BadCredentialsException ex) {
+        ExceptionDetails details = new ExceptionDetails(
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                AuthExceptionMessage.BAD_CREDENTIALS,
+                "",
+                LocalDateTime.now(),
+                null
+        );
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(details);
+    }
+
+    @ExceptionHandler(AuthInvalidCredentialsException.class)
+    public ResponseEntity<ExceptionDetails> handleAuthInvalidCredentialsException(AuthInvalidCredentialsException ex) {
+        ExceptionDetails details = new ExceptionDetails(
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                ex.getMessage(),
+                "",
+                LocalDateTime.now(),
+                null
+        );
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(details);
+    }
+
+    @ExceptionHandler(AuthNotValidFieldException.class)
+    public ResponseEntity<ExceptionDetails> handleAuthNotValidFieldException(AuthNotValidFieldException ex) {
+        ExceptionDetails details = new ExceptionDetails(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                ex.getMessage(),
+                "",
+                LocalDateTime.now(),
+                ex.getErrors()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(details);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionDetails> handleAccessDeniedException(AccessDeniedException ex) {
+        ExceptionDetails details = new ExceptionDetails(
+                HttpStatus.FORBIDDEN.value(),
+                HttpStatus.FORBIDDEN.getReasonPhrase(),
+                AuthExceptionMessage.BAD_ROLE,
+                "",
+                LocalDateTime.now(),
+                null
+        );
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(details);
+    }
+
     //General
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ExceptionDetails> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
@@ -105,31 +166,6 @@ public class AdviceHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 GlobalExceptionMessage.INVALID_OBJECT,
-                "",
-                LocalDateTime.now(),
-                errorsDetails
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(details);
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ExceptionDetails> handleConstraintViolationException(ConstraintViolationException ex) {
-
-        List<ErrorDetail> errorsDetails = ex.getConstraintViolations().stream()
-                .map(constraintViolation -> {
-                    String fieldName = constraintViolation.getPropertyPath().toString();
-                    fieldName = fieldName.contains(".")
-                            ? fieldName.substring(fieldName.lastIndexOf('.') + 1)
-                            : fieldName;
-                    return new ErrorDetail(fieldName, constraintViolation.getMessage());
-                })
-                .toList();
-
-        ExceptionDetails details = new ExceptionDetails(
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                GlobalExceptionMessage.INVALID_PARAMETERS,
                 "",
                 LocalDateTime.now(),
                 errorsDetails

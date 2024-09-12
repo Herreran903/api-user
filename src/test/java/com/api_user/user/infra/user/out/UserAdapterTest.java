@@ -1,6 +1,7 @@
 package com.api_user.user.infra.user.out;
 
 import com.api_user.user.domain.role.model.Role;
+import com.api_user.user.domain.role.util.RoleEnum;
 import com.api_user.user.domain.user.model.User;
 import com.api_user.user.infra.role.out.RoleEntity;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,7 +56,7 @@ class UserAdapterTest {
                 VALID_USER_BIRTHDATE,
                 VALID_USER_EMAIL,
                 VALID_USER_PASSWORD,
-                new RoleEntity(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION)
+                new RoleEntity(VALID_ROLE_ID, RoleEnum.ROLE_WAREHOUSE_ASSISTANT, VALID_ROLE_DESCRIPTION)
         );
     }
 

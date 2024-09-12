@@ -50,7 +50,7 @@ public class UserUseCase implements IUserServicePort {
     public void createUserWarehouseAssistant(User user) {
         validateUser(user);
 
-        Role role = roleServicePort.getRoleByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT.toString());
+        Role role = roleServicePort.getRoleByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT);
         user.setRole(role);
 
         String encodePassword = passwordEncoderPort.encode(user.getPassword());

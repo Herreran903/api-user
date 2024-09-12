@@ -28,6 +28,8 @@ public class User {
         this.role = builder.role;
     }
 
+    public User() {}
+
     public static class Builder {
         private Long id;
         private String name;

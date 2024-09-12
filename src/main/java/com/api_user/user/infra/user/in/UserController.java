@@ -19,11 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.api_user.user.infra.user.util.UserSwaggerMessages.*;
+import static com.api_user.user.infra.util.SwaggerMessages.*;
+import static com.api_user.user.infra.util.Urls.USER_URL;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(USER_URL)
+//@PreAuthorize("denyAll()")
 @Validated
 public class UserController {
+
+    private static final String REGISTER_WAREHOUSE_URL = "/warehouse-assistant/register";
 
     private final IUserHandler userHandler;
 
@@ -45,15 +50,16 @@ public class UserController {
             )
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = RESPONSE_201_DESCRIPTION),
-            @ApiResponse(responseCode = "400", description = RESPONSE_400_DESCRIPTION,
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionDetails.class))
+            @ApiResponse(responseCode = CODE_201, description = RESPONSE_201_DESCRIPTION),
+            @ApiResponse(responseCode = CODE_400, description = RESPONSE_400_DESCRIPTION,
+                    content = @Content(schema = @Schema(implementation = ExceptionDetails.class))
             ),
-            @ApiResponse(responseCode = "500", description = RESPONSE_500_DESCRIPTION,
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionDetails.class))
+            @ApiResponse(responseCode = CODE_500, description = RESPONSE_500_DESCRIPTION,
+                    content = @Content(schema = @Schema(implementation = ExceptionDetails.class))
             )
     })
-    @PostMapping("/warehouse-assistant/register/")
+    @PostMapping(REGISTER_WAREHOUSE_URL)
+    //@PreAuthorize("hasRole(T(com.api_user.user.domain.role.util.RoleEnum).ROLE_ADMIN.toString())")
     ResponseEntity<Void> createUser(@Valid @RequestBody UserRequest userRequest) {
         userHandler.createUserWarehouseAssistant(userRequest);
 

@@ -4,6 +4,7 @@ import com.api_user.user.domain.role.exception.RoleExceptionMessage;
 import com.api_user.user.domain.role.exception.ex.RoleNotFoundByNameException;
 import com.api_user.user.domain.role.model.Role;
 import com.api_user.user.domain.role.spi.IRolePersistencePort;
+import com.api_user.user.domain.role.util.RoleEnum;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,9 +31,9 @@ class RoleUseCaseTest {
     @Test
     void shouldReturnRoleWhenRoleExists() {
         Role expectedRole = new Role(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
-        when(rolePersistencePort.getRoleByName(VALID_ROLE_NAME)).thenReturn(Optional.of(expectedRole));
+        when(rolePersistencePort.getRoleByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT)).thenReturn(Optional.of(expectedRole));
 
-        Role actualRole = roleUseCase.getRoleByName(VALID_ROLE_NAME);
+        Role actualRole = roleUseCase.getRoleByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT);
 
         assertNotNull(actualRole);
         assertEquals(expectedRole, actualRole);
@@ -40,12 +41,11 @@ class RoleUseCaseTest {
 
     @Test
     void shouldThrowRoleNotFoundExceptionWhenRoleDoesNotExist() {
-        String roleName = "ROLE_NON_EXISTENT";
-        when(rolePersistencePort.getRoleByName(roleName)).thenReturn(Optional.empty());
+        when(rolePersistencePort.getRoleByName(null)).thenReturn(Optional.empty());
 
         RoleNotFoundByNameException exception = assertThrows(
                 RoleNotFoundByNameException.class,
-                () -> roleUseCase.getRoleByName(roleName)
+                () -> roleUseCase.getRoleByName(null)
         );
 
         assertEquals(RoleExceptionMessage.NOT_FOUND_ROLE, exception.getMessage());

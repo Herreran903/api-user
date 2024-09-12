@@ -1,6 +1,7 @@
 package com.api_user.user.infra.role.out;
 
 import com.api_user.user.domain.role.model.Role;
+import com.api_user.user.domain.role.util.RoleEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -32,27 +33,27 @@ class RoleAdapterTest {
         MockitoAnnotations.openMocks(this);
 
         role = new Role(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
-        roleEntity = new RoleEntity(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
+        roleEntity = new RoleEntity(VALID_ROLE_ID, RoleEnum.ROLE_WAREHOUSE_ASSISTANT, VALID_ROLE_DESCRIPTION);
     }
 
     @Test
     void getRoleByNameShouldReturnRoleWhenRoleExist() {
-        when(roleRepository.findByName(VALID_ROLE_NAME)).thenReturn(Optional.of(roleEntity));
+        when(roleRepository.findByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT)).thenReturn(Optional.of(roleEntity));
         when(roleMapper.toRole(roleEntity)).thenReturn(role);
 
-        Optional<Role> result = roleAdapter.getRoleByName(VALID_ROLE_NAME);
+        Optional<Role> result = roleAdapter.getRoleByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT);
 
         assertTrue(result.isPresent());
         assertEquals(role, result.get());
-        verify(roleRepository, times(1)).findByName(VALID_ROLE_NAME);
+        verify(roleRepository, times(1)).findByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT);
         verify(roleMapper, times(1)).toRole(roleEntity);
     }
 
     @Test
     void testGetRoleByName_RoleDoesNotExist() {
-        when(roleRepository.findByName(VALID_ROLE_NAME)).thenReturn(Optional.empty());
+        when(roleRepository.findByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT)).thenReturn(Optional.empty());
 
-        Optional<Role> result = roleAdapter.getRoleByName(VALID_ROLE_NAME);
+        Optional<Role> result = roleAdapter.getRoleByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT);
 
         assertFalse(result.isPresent());
     }
