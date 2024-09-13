@@ -32,7 +32,7 @@ import static com.api_user.user.infra.util.Urls.AUTH_URL;
 @PreAuthorize("permitAll()")
 public class AuthController {
 
-    private final static String LOGIN_URL = "/login";
+    private static final String LOGIN_URL = "/login";
 
     private final IAuthHandler authHandler;
 

@@ -19,6 +19,8 @@ public final class TestConstants {
     public static final String VALID_USER_ROLE = "ROLE_WAREHOUSE_ASSISTANT";
 
     public static final Long VALID_ROLE_ID = 1L;
-    public static final String VALID_ROLE_NAME = "ROLE_WAREHOUSE_ASSISTANT";
-    public static final String VALID_ROLE_DESCRIPTION = "ROLE_WAREHOUSE_ASSISTANT";
+    public static final String ROLE_WAREHOUSE_ASSISTANT_NAME = "ROLE_WAREHOUSE_ASSISTANT";
+    public static final String ROLE_WAREHOUSE_ASSISTANT_DESC = "ROLE_WAREHOUSE_ASSISTANT";
+    public static final String ROLE_CLIENT_NAME = "ROLE_CLIENT_NAME";
+    public static final String ROLE_CLIENT_DESC = "ROLE_CLIENT_NAME";
 }

@@ -10,6 +10,10 @@ public class UserSwaggerMessages {
     public static final String CREATE_WAREHOUSE_ASSISTANT_DESCRIPTION = "This endpoint allows registering a new warehouse assistant in the system.";
     public static final String CREATE_WAREHOUSE_ASSISTANT_REQUEST_BODY_DESCRIPTION = "Request body to create a new warehouse assistant";
 
+    public static final String CREATE_CLIENT_SUMMARY = "Register a new client";
+    public static final String CREATE_CLIENT_DESCRIPTION = "This endpoint allows registering a new client in the system.";
+    public static final String CREATE_CLIENT_REQUEST_BODY_DESCRIPTION = "Request body to create a new client";
+
 
     public static final String USER_REQUEST_EXAMPLE = "{ \"name\": \"John\", " +
             "\"lastname\": \"Doe\", " +

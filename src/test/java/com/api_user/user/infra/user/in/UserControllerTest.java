@@ -160,7 +160,7 @@ class UserControllerTest {
     }
 
     @Test
-    void shouldReturnCreatedWhenUserIsSuccessfullyCreated() throws Exception {
+    void shouldReturnCreatedWhenUserWarehouseIsSuccessfullyCreated() throws Exception {
 
         String requestBody = getUserRequestBody("Name", "Lastname", "0123456789", "1234567890", "1990-01-01", "email@example.com", "password", "USER");
 
@@ -171,5 +171,19 @@ class UserControllerTest {
                 .andExpect(status().isCreated());
 
         verify(userHandler, times(1)).createUserWarehouseAssistant(any(UserRequest.class));
+    }
+
+    @Test
+    void shouldReturnCreatedWhenUserClientIsSuccessfullyCreated() throws Exception {
+
+        String requestBody = getUserRequestBody("Name", "Lastname", "0123456789", "1234567890", "1990-01-01", "email@example.com", "password", "USER");
+
+        mvc.perform(post("/user/client/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        verify(userHandler, times(1)).createUserClient(any(UserRequest.class));
     }
 }

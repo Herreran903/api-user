@@ -30,7 +30,7 @@ class RoleUseCaseTest {
 
     @Test
     void shouldReturnRoleWhenRoleExists() {
-        Role expectedRole = new Role(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
+        Role expectedRole = new Role(VALID_ROLE_ID, ROLE_WAREHOUSE_ASSISTANT_NAME, ROLE_WAREHOUSE_ASSISTANT_DESC);
         when(rolePersistencePort.getRoleByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT)).thenReturn(Optional.of(expectedRole));
 
         Role actualRole = roleUseCase.getRoleByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT);

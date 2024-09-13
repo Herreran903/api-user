@@ -11,7 +11,7 @@ class UserTest {
     @Test
     void shouldUpdateUserSuccessfully() {
         User user = new User.Builder().build();
-        Role role = new Role(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
+        Role role = new Role(VALID_ROLE_ID, ROLE_WAREHOUSE_ASSISTANT_NAME, ROLE_WAREHOUSE_ASSISTANT_DESC);
 
         user.setId(VALID_USER_ID);
         user.setName(VALID_USER_NAME);

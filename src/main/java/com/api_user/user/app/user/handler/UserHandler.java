@@ -1,5 +1,6 @@
 package com.api_user.user.app.user.handler;
 
+import com.api_user.user.app.auth.dto.AuthResponse;
 import com.api_user.user.app.user.dto.UserRequest;
 import com.api_user.user.app.user.mapper.IUserRequestMapper;
 import com.api_user.user.domain.role.api.IRoleServicePort;
@@ -21,5 +22,12 @@ public class UserHandler implements IUserHandler {
         User user = userRequestMapper.toUser(userRequest);
 
         userService.createUserWarehouseAssistant(user);
+    }
+
+    @Override
+    public AuthResponse createUserClient(UserRequest userRequest){
+        User user = userRequestMapper.toUser(userRequest);
+
+        return new AuthResponse(userService.createUserClient(user));
     }
 }
