@@ -34,7 +34,7 @@ class UserAdapterTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        Role role = new Role(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
+        Role role = new Role(VALID_ROLE_ID, ROLE_WAREHOUSE_ASSISTANT_NAME, ROLE_WAREHOUSE_ASSISTANT_DESC);
         user = new User.Builder()
                 .id(VALID_USER_ID)
                 .name(VALID_USER_NAME)
@@ -56,7 +56,7 @@ class UserAdapterTest {
                 VALID_USER_BIRTHDATE,
                 VALID_USER_EMAIL,
                 VALID_USER_PASSWORD,
-                new RoleEntity(VALID_ROLE_ID, RoleEnum.ROLE_WAREHOUSE_ASSISTANT, VALID_ROLE_DESCRIPTION)
+                new RoleEntity(VALID_ROLE_ID, RoleEnum.ROLE_WAREHOUSE_ASSISTANT, ROLE_WAREHOUSE_ASSISTANT_DESC)
         );
     }
 

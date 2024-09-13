@@ -111,7 +111,7 @@ class AuthUseCaseTest {
 
     @Test
     void shouldCallAuthAdapterPortAuthenticate() {
-        Role role = new Role(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
+        Role role = new Role(VALID_ROLE_ID, ROLE_WAREHOUSE_ASSISTANT_NAME, ROLE_WAREHOUSE_ASSISTANT_DESC);
 
         User user = new User();
         user.setId(VALID_USER_ID);
@@ -127,7 +127,7 @@ class AuthUseCaseTest {
 
     @Test
     void shouldGenerateTokenSuccessfully() {
-        Role role = new Role(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
+        Role role = new Role(VALID_ROLE_ID, ROLE_WAREHOUSE_ASSISTANT_NAME, ROLE_WAREHOUSE_ASSISTANT_DESC);
 
         User user = new User();
         user.setId(VALID_USER_ID);

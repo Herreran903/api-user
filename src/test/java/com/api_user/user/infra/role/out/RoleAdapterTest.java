@@ -32,8 +32,8 @@ class RoleAdapterTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        role = new Role(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
-        roleEntity = new RoleEntity(VALID_ROLE_ID, RoleEnum.ROLE_WAREHOUSE_ASSISTANT, VALID_ROLE_DESCRIPTION);
+        role = new Role(VALID_ROLE_ID, ROLE_WAREHOUSE_ASSISTANT_NAME, ROLE_WAREHOUSE_ASSISTANT_DESC);
+        roleEntity = new RoleEntity(VALID_ROLE_ID, RoleEnum.ROLE_WAREHOUSE_ASSISTANT, ROLE_WAREHOUSE_ASSISTANT_DESC);
     }
 
     @Test

@@ -1,5 +1,7 @@
 package com.api_user.user.domain.user.usecase;
 
+import com.api_user.user.domain.auth.api.IAuthServicePort;
+import com.api_user.user.domain.auth.model.Auth;
 import com.api_user.user.domain.role.api.IRoleServicePort;
 import com.api_user.user.domain.role.model.Role;
 import com.api_user.user.domain.role.util.RoleEnum;
@@ -20,13 +22,19 @@ import java.util.List;
 public class UserUseCase implements IUserServicePort {
 
     private final IUserPersistencePort userPersistencePort;
+    private final IAuthServicePort authServicePort;
     private final IPasswordEncoderPort passwordEncoderPort;
     private final IRoleServicePort roleServicePort;
 
-    public UserUseCase(IUserPersistencePort userPersistencePort, IPasswordEncoderPort passwordEncoderPort, IRoleServicePort roleServicePort) {
+    public UserUseCase(
+            IUserPersistencePort userPersistencePort,
+            IAuthServicePort authServicePort,
+            IPasswordEncoderPort passwordEncoderPort,
+            IRoleServicePort roleServicePort) {
         this.userPersistencePort = userPersistencePort;
         this.passwordEncoderPort = passwordEncoderPort;
         this.roleServicePort = roleServicePort;
+        this.authServicePort = authServicePort;
     }
 
     private void validateUser(User user) {
@@ -57,5 +65,21 @@ public class UserUseCase implements IUserServicePort {
         user.setPassword(encodePassword);
 
         userPersistencePort.createUser(user);
+    }
+
+    @Override
+    public String createUserClient(User user){
+        validateUser(user);
+
+        Role role = roleServicePort.getRoleByName(RoleEnum.ROLE_CLIENT);
+        user.setRole(role);
+
+        String rawPassword = user.getPassword();
+        String encodePassword = passwordEncoderPort.encode(rawPassword);
+        user.setPassword(encodePassword);
+
+        userPersistencePort.createUser(user);
+
+        return authServicePort.authenticate(new Auth(user.getEmail(), rawPassword));
     }
 }

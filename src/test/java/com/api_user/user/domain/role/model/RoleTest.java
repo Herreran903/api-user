@@ -12,11 +12,11 @@ class RoleTest {
         Role role = new Role(2L, null, null);
 
         role.setId(VALID_ROLE_ID);
-        role.setName(VALID_ROLE_NAME);
-        role.setDescription(VALID_ROLE_DESCRIPTION);
+        role.setName(ROLE_WAREHOUSE_ASSISTANT_NAME);
+        role.setDescription(ROLE_WAREHOUSE_ASSISTANT_DESC);
 
         assertEquals(VALID_ROLE_ID, role.getId());
-        assertEquals(VALID_ROLE_NAME, role.getName());
-        assertEquals(VALID_ROLE_DESCRIPTION, role.getDescription());
+        assertEquals(ROLE_WAREHOUSE_ASSISTANT_NAME, role.getName());
+        assertEquals(ROLE_WAREHOUSE_ASSISTANT_DESC, role.getDescription());
     }
 }

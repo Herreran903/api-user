@@ -1,5 +1,6 @@
 package com.api_user.user.infra.user.config;
 
+import com.api_user.user.domain.auth.api.IAuthServicePort;
 import com.api_user.user.domain.role.api.IRoleServicePort;
 import com.api_user.user.domain.user.api.IUserServicePort;
 import com.api_user.user.domain.user.spi.IPasswordEncoderPort;
@@ -11,6 +12,7 @@ import com.api_user.user.infra.user.out.UserAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 @Configuration
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class BeanUserConfig {
     }
 
     @Bean
-    public IUserServicePort userServicePort() {
-        return new UserUseCase(userPersistencePort(), passwordEncoderPort, roleService);
+    public IUserServicePort userServicePort(@Lazy IAuthServicePort authServicePort) {
+        return new UserUseCase(userPersistencePort(), authServicePort, passwordEncoderPort, roleService);
     }
 }

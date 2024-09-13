@@ -2,7 +2,6 @@ package com.api_user.user.infra.auth.out;
 
 import com.api_user.user.domain.auth.model.Auth;
 import com.api_user.user.domain.auth.spi.IAuthAdapterPort;
-import com.api_user.user.domain.auth.util.AuthConstants;
 import com.api_user.user.infra.security.jwt.JwtService;
 import com.api_user.user.infra.security.userdetail.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;

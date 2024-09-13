@@ -1,5 +1,7 @@
 package com.api_user.user.domain.user.usecase;
 
+import com.api_user.user.domain.auth.api.IAuthServicePort;
+import com.api_user.user.domain.auth.model.Auth;
 import com.api_user.user.domain.role.api.IRoleServicePort;
 import com.api_user.user.domain.role.model.Role;
 import com.api_user.user.domain.role.util.RoleEnum;
@@ -32,16 +34,21 @@ class UserUseCaseTest{
     @Mock
     private IRoleServicePort roleServicePort;
 
+    @Mock
+    private IAuthServicePort authServicePort;
+
     @InjectMocks
     private UserUseCase userUseCase;
 
     private User user;
-    private Role role;
+    private Role roleWarehouse;
+    private Role roleClient;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        role = new Role(VALID_ROLE_ID, VALID_ROLE_NAME, VALID_ROLE_DESCRIPTION);
+        roleWarehouse = new Role(VALID_ROLE_ID, ROLE_WAREHOUSE_ASSISTANT_NAME, ROLE_WAREHOUSE_ASSISTANT_DESC);
+        roleClient = new Role(VALID_ROLE_ID, ROLE_CLIENT_NAME, ROLE_CLIENT_DESC);
         user = new User.Builder()
                 .id(VALID_USER_ID)
                 .name(VALID_USER_NAME)
@@ -51,7 +58,7 @@ class UserUseCaseTest{
                 .birthdate(VALID_USER_BIRTHDATE)
                 .email(VALID_USER_EMAIL)
                 .password(VALID_USER_PASSWORD)
-                .role(role)
+                .role(roleWarehouse)
                 .build();
     }
 
@@ -94,17 +101,35 @@ class UserUseCaseTest{
     }
 
     @Test
-    void shouldCreateUserSuccessfully() {
+    void shouldCreateUserWareHouseSuccessfully() {
         when(userPersistencePort.isUserPresentByDni(user.getDni())).thenReturn(false);
         when(userPersistencePort.isUserPresentByEmail(user.getEmail())).thenReturn(false);
         when(passwordEncoderPort.encode(user.getPassword())).thenReturn("encodedPassword");
-        when(roleServicePort.getRoleByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT)).thenReturn(role);
+        when(roleServicePort.getRoleByName(RoleEnum.ROLE_WAREHOUSE_ASSISTANT)).thenReturn(roleWarehouse);
 
         userUseCase.createUserWarehouseAssistant(user);
 
         verify(userPersistencePort, times(1)).createUser(user);
         assertEquals("encodedPassword", user.getPassword());
     }
+
+    @Test
+    void shouldCreateUserClientSuccessfully() {
+        when(userPersistencePort.isUserPresentByDni(user.getDni())).thenReturn(false);
+        when(userPersistencePort.isUserPresentByEmail(user.getEmail())).thenReturn(false);
+        when(passwordEncoderPort.encode(user.getPassword())).thenReturn("encodedPassword");
+        when(roleServicePort.getRoleByName(RoleEnum.ROLE_CLIENT)).thenReturn(roleClient);
+        when(authServicePort.authenticate(any(Auth.class))).thenReturn("authToken");
+
+        String authToken = userUseCase.createUserClient(user);
+
+        verify(userPersistencePort, times(1)).createUser(user);
+        verify(authServicePort).authenticate(any(Auth.class));
+        assertEquals("encodedPassword", user.getPassword());
+        assertEquals("authToken", authToken);
+    }
+
+
 
 
 }
